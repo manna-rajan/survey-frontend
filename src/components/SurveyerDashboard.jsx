@@ -50,7 +50,7 @@ const RejectedSurveysList = ({ surveyerId }) => {
         };
 
         fetchRejectedSurveys();
-    }, [surveyerId]);
+    }, [surveyerId, API_BASE_URL]);
 
     const handleNext = () => {
         if (surveys.length > 1) {
@@ -147,7 +147,7 @@ const AcceptedSurveysList = ({ surveyerId }) => {
         };
 
         fetchAcceptedSurveys();
-    }, [surveyerId]);
+    }, [surveyerId, API_BASE_URL]);
 
     const handleNext = () => {
         if (surveys.length > 1) {
@@ -243,7 +243,7 @@ const SurveyerDashboard = () => {
         };
 
         fetchStats();
-    }, [surveyerId, navigate]);
+    }, [surveyerId, navigate, API_BASE_URL]);
 
     const handleNewSurvey = () => {
         navigate('/surveyer/new-survey');

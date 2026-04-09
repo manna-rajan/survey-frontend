@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FaClipboardList, FaUsers, FaCarSide, FaHourglassHalf } from 'react-icons/fa';
@@ -20,7 +20,7 @@ const AdminDashboard = () => {
     const [acceptedError, setAcceptedError] = useState('');
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const fetchStats = async () => {
+    const fetchStats = useCallback(async () => {
         try {
             setLoadingStats(true);
             const response = await axios.post(`${API_BASE_URL}/admin/stats`, { adminId });
@@ -32,9 +32,9 @@ const AdminDashboard = () => {
         } finally {
             setLoadingStats(false);
         }
-    };
+    }, [adminId, API_BASE_URL]);
 
-    const fetchAcceptedSurveys = async () => {
+    const fetchAcceptedSurveys = useCallback(async () => {
         try {
             setLoadingAccepted(true);
             setAcceptedError('');
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
         } finally {
             setLoadingAccepted(false);
         }
-    };
+    }, [adminId, API_BASE_URL]);
 
     useEffect(() => {
         if (!adminId) {
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
         } else {
             fetchStats();
         }
-    }, [adminId, navigate, viewingAccepted]);
+    }, [adminId, navigate, viewingAccepted, fetchAcceptedSurveys, fetchStats]);
 
     const handleAddSurveyer = () => {
         navigate('/admin/add-surveyer');

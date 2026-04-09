@@ -35,7 +35,7 @@ const NivoBarChart = () => {
         };
 
         fetchChartData();
-    }, [adminId, navigate]);
+    }, [adminId, navigate, API_BASE_URL]);
 
     if (loading) {
         return (

@@ -36,7 +36,7 @@ const AdminCheck = ({ onReviewSuccess }) => {
         };
 
         fetchPendingSurveys();
-    }, [adminId, navigate]);
+    }, [adminId, navigate, API_BASE_URL]);
 
     const handleReview = async (surveyId, status) => {
         try {
