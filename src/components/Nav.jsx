@@ -28,7 +28,7 @@ const Nav = () => {
                                         <>
                                             <Link className="btn btn-outline-warning text-white-emphasis rounded-pill" to="/admin/dashboard">Admin Dashboard</Link>
                                             <Link className="btn btn-outline-warning text-white-emphasis rounded-pill" to="/admin/add-surveyer">Add Surveyer</Link>
-                                            <Link className="btn btn-outline-warning text-white-emphasis rounded-pill" to="/admin/signup">Add Admin</Link>
+                                            <Link className="btn btn-outline-warning text-white-emphasis rounded-pill" to="/admin/review">Validate Survey</Link>
                                         </>
                                     )}
                                     {surveyerId && (
