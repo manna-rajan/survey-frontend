@@ -4,6 +4,8 @@ import { ResponsiveBar } from '@nivo/bar';
 import { useNavigate } from 'react-router-dom';
 
 const NivoBarChart = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -19,7 +21,7 @@ const NivoBarChart = () => {
         const fetchChartData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.post('http://localhost:3001/admin/surveys-by-month', { adminId });
+                const response = await axios.post(`${API_BASE_URL}/admin/surveys-by-month`, { adminId });
                 if (response.data.status === 'success') {
                     setData(response.data.data);
                 } else {

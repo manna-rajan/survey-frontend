@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 
 const SurveyerSignin = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const VALIDATION_RULES = {
         email: {
@@ -58,7 +60,7 @@ const SurveyerSignin = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:3001/surveyer/signin", trimmedInput);
+            const response = await axios.post(`${API_BASE_URL}/surveyer/signin`, trimmedInput);
             if (response.data.status === "success") {
                 sessionStorage.setItem("surveyerid", response.data.surveyerId);
                 sessionStorage.setItem("surveyername", response.data.name);

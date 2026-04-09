@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import Nav from './Nav';
 
 const AddSurveyer = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const [input, setInput] = useState({ name: '', email: '' });
     const [errors, setErrors] = useState({});
@@ -64,7 +66,7 @@ const AddSurveyer = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3001/admin/add-surveyer', {
+            const response = await axios.post(`${API_BASE_URL}/admin/add-surveyer`, {
                 ...trimmedInput,
                 adminId,
             });

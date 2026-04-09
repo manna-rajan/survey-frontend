@@ -4,6 +4,8 @@ import { useNavigate, Link } from 'react-router-dom';
 
 
 const AdminSignin = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const VALIDATION_RULES = {
         email: {
@@ -60,7 +62,7 @@ const AdminSignin = () => {
         };
 
         try {
-            const response = await axios.post("http://localhost:3001/admin-signin", trimmedInput);
+            const response = await axios.post(`${API_BASE_URL}/admin-signin`, trimmedInput);
             if (response.data.status === "success") {
                 sessionStorage.setItem("adminid", response.data.adminId);
                 sessionStorage.setItem("adminname", response.data.name);

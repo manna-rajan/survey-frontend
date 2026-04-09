@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Nav from './Nav';
 
 const HomeSurveyForm = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const [surveyData, setSurveyData] = useState({
         propertyAddress: '',
@@ -72,7 +74,7 @@ const HomeSurveyForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post("http://localhost:3001/survey/submit", {
+            const response = await axios.post(`${API_BASE_URL}/survey/submit`, {
                 surveyData,
                 surveyerId
             });

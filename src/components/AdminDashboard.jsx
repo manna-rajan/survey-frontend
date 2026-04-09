@@ -7,6 +7,8 @@ import NivoBarChart from './NivoBarChart';
 import Nav from './Nav';
 
 const AdminDashboard = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const adminName = sessionStorage.getItem('adminname');
     const adminId = sessionStorage.getItem('adminid');
@@ -21,7 +23,7 @@ const AdminDashboard = () => {
     const fetchStats = async () => {
         try {
             setLoadingStats(true);
-            const response = await axios.post('http://localhost:3001/admin/stats', { adminId });
+            const response = await axios.post(`${API_BASE_URL}/admin/stats`, { adminId });
             if (response.data.status === 'success') {
                 setStats(response.data.stats);
             }
@@ -36,7 +38,7 @@ const AdminDashboard = () => {
         try {
             setLoadingAccepted(true);
             setAcceptedError('');
-            const response = await axios.post('http://localhost:3001/admin/surveys/accepted', { adminId });
+            const response = await axios.post(`${API_BASE_URL}/admin/surveys/accepted`, { adminId });
             if (response.data.status === 'success') {
                 setAcceptedSurveys(response.data.surveys);
             } else {

@@ -4,6 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import Nav from './Nav';
 
 const AdminCheck = ({ onReviewSuccess }) => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const [surveys, setSurveys] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -20,7 +22,7 @@ const AdminCheck = ({ onReviewSuccess }) => {
         const fetchPendingSurveys = async () => {
             try {
                 setLoading(true);
-                const response = await axios.post('http://localhost:3001/admin/surveys/pending', { adminId });
+                const response = await axios.post(`${API_BASE_URL}/admin/surveys/pending`, { adminId });
                 if (response.data.status === 'success') {
                     setSurveys(response.data.surveys);
                 } else {
@@ -38,7 +40,7 @@ const AdminCheck = ({ onReviewSuccess }) => {
 
     const handleReview = async (surveyId, status) => {
         try {
-            const response = await axios.post('http://localhost:3001/admin/surveys/review', { surveyId, status, adminId });
+            const response = await axios.post(`${API_BASE_URL}/admin/surveys/review`, { surveyId, status, adminId });
             if (response.data.status === 'success') {
                 setSurveys(prevSurveys => {
                     const newSurveys = prevSurveys.filter(s => s._id !== surveyId);

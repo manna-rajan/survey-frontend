@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const SurveyerSetPassword = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const [token, setToken] = useState(null);
@@ -67,7 +69,7 @@ const SurveyerSetPassword = () => {
         setErrors({});
 
         try {
-            const response = await axios.post("http://localhost:3001/surveyer/set-password", {
+            const response = await axios.post(`${API_BASE_URL}/surveyer/set-password`, {
                 token: token,
                 password: input.password
             });

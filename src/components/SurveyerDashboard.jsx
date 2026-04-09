@@ -20,6 +20,8 @@ const renderItemGroup = (title, items) => (
 );
 
 const RejectedSurveysList = ({ surveyerId }) => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const [surveys, setSurveys] = useState([]);
     const [loading, setLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -34,7 +36,7 @@ const RejectedSurveysList = ({ surveyerId }) => {
         const fetchRejectedSurveys = async () => {
             try {
                 setLoading(true);
-                const response = await axios.post('http://localhost:3001/surveyer/surveys/rejected', { surveyerId });
+                const response = await axios.post(`${API_BASE_URL}/surveyer/surveys/rejected`, { surveyerId });
                 if (response.data.status === 'success') {
                     setSurveys(response.data.surveys);
                 } else {
@@ -115,6 +117,8 @@ const RejectedSurveysList = ({ surveyerId }) => {
 };
 
 const AcceptedSurveysList = ({ surveyerId }) => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const [surveys, setSurveys] = useState([]);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(true);
@@ -129,7 +133,7 @@ const AcceptedSurveysList = ({ surveyerId }) => {
         const fetchAcceptedSurveys = async () => {
             try {
                 setLoading(true);
-                const response = await axios.post('http://localhost:3001/surveyer/surveys/accepted', { surveyerId });
+                const response = await axios.post(`${API_BASE_URL}/surveyer/surveys/accepted`, { surveyerId });
                 if (response.data.status === 'success') {
                     setSurveys(response.data.surveys);
                 } else {
@@ -210,6 +214,8 @@ const AcceptedSurveysList = ({ surveyerId }) => {
 };
 
 const SurveyerDashboard = () => {
+    const API_BASE_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:3001";
+
     const navigate = useNavigate();
     const surveyerName = sessionStorage.getItem('surveyername');
     const surveyerId = sessionStorage.getItem('surveyerid');
@@ -225,7 +231,7 @@ const SurveyerDashboard = () => {
         const fetchStats = async () => {
             try {
                 setLoadingStats(true);
-                const response = await axios.post('http://localhost:3001/surveyer/stats', { surveyerId });
+                const response = await axios.post(`${API_BASE_URL}/surveyer/stats`, { surveyerId });
                 if (response.data.status === 'success') {
                     setStats(response.data.stats);
                 }
