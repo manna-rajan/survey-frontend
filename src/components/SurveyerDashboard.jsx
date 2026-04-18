@@ -255,8 +255,7 @@ const SurveyerDashboard = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Surveyer Dashboard</h2>
                 <div>
-                    <span className="me-3">Welcome, {surveyerName}!</span>
-                    <button className="btn btn-primary me-3" onClick={handleNewSurvey}>Create New Survey</button>
+                    <span className="me-3 text-muted">Welcome, <strong className="text-dark fw-semibold">{surveyerName}!</strong></span>
                 </div>
             </div>
 
@@ -277,10 +276,11 @@ const SurveyerDashboard = () => {
 
             <div className="row">
                 <div className="col-12 mb-4">
-                    <RejectedSurveysList surveyerId={surveyerId} />
+                    <AcceptedSurveysList surveyerId={surveyerId} />
+
                 </div>
                 <div className="col-12 mb-4">
-                    <AcceptedSurveysList surveyerId={surveyerId} />
+                    <RejectedSurveysList surveyerId={surveyerId} />
                 </div>
             </div>
         </div>

@@ -14,7 +14,6 @@ const AdminDashboard = () => {
     const adminId = sessionStorage.getItem('adminid');
     const [stats, setStats] = useState(null);
     const [loadingStats, setLoadingStats] = useState(true);
-    const [viewingAccepted, setViewingAccepted] = useState(false);
     const [acceptedSurveys, setAcceptedSurveys] = useState([]);
     const [loadingAccepted, setLoadingAccepted] = useState(false);
     const [acceptedError, setAcceptedError] = useState('');
@@ -57,20 +56,9 @@ const AdminDashboard = () => {
             return;
         }
 
-        if (viewingAccepted) {
-            fetchAcceptedSurveys();
-        } else {
-            fetchStats();
-        }
-    }, [adminId, navigate, viewingAccepted, fetchAcceptedSurveys, fetchStats]);
-
-    const handleAddSurveyer = () => {
-        navigate('/admin/add-surveyer');
-    };
-
-    const handleAddAdmin = () => {
-        navigate('/admin/signup');
-    };
+        fetchStats();
+        fetchAcceptedSurveys();
+    }, [adminId, navigate, fetchAcceptedSurveys, fetchStats]);
 
     const handleNext = () => {
         if (acceptedSurveys.length > 1) {
@@ -98,60 +86,49 @@ const AdminDashboard = () => {
         </div>
     );
 
-    if (viewingAccepted) {
+    const renderAcceptedSurveys = () => {
+        if (loadingAccepted) return <p>Loading surveys...</p>;
+        if (acceptedError) return <div className="alert alert-danger">{acceptedError}</div>;
+
+        if (acceptedSurveys.length === 0) {
+            return <p>No accepted surveys found.</p>;
+        }
+
         const currentSurvey = acceptedSurveys[currentIndex];
-
         return (
-            <div className="container mt-4">
-                <Nav />
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                    <h2>All Accepted Surveys</h2>
-                    <button className="btn btn-secondary" onClick={() => { setViewingAccepted(false); setCurrentIndex(0); }}>Back to Dashboard</button>
+            <div className="card">
+                <div className="card-header d-flex justify-content-between align-items-center">
+                    <h5 className="mb-0">Accepted Survey ({currentIndex + 1} of {acceptedSurveys.length})</h5>
                 </div>
-
-                {loadingAccepted && <p>Loading surveys...</p>}
-                {acceptedError && <div className="alert alert-danger">{acceptedError}</div>}
-
-                {!loadingAccepted && !acceptedError && (
-                    acceptedSurveys.length === 0 ? (
-                        <p>No accepted surveys found.</p>
-                    ) : (
-                        <div className="card">
-                            <div className="card-header d-flex justify-content-between align-items-center">
-                                <h5 className="mb-0">Accepted Survey ({currentIndex + 1} of {acceptedSurveys.length})</h5>
-                            </div>
-                            <div className="card-body">
-                                <p><strong>Address:</strong> {currentSurvey.propertyAddress}</p>
-                                <p><strong>Move Date:</strong> {new Date(currentSurvey.moveDate).toLocaleDateString()}</p>
-                                <p><strong>Surveyor:</strong> {currentSurvey.submittedBy?.name || 'N/A'} ({currentSurvey.submittedBy?.email || 'N/A'})</p>
-                                <hr />
-                                <div className="row">
-                                    <div className="col-md-6">
-                                        {renderItemGroup('Household', currentSurvey.household)}
-                                        {renderItemGroup('Vehicles', currentSurvey.vehicles)}
-                                    </div>
-                                    <div className="col-md-6">
-                                        {renderItemGroup('Major Items', currentSurvey.majorItems)}
-                                        <div>
-                                            <strong>Property Access</strong>
-                                            <ul className="list-group list-group-flush">
-                                                <li className="list-group-item">Type: {currentSurvey.propertyAccess.propertyType}</li>
-                                                <li className="list-group-item">Floor: {currentSurvey.propertyAccess.floorNumber}</li>
-                                                <li className="list-group-item">Elevator: {currentSurvey.propertyAccess.elevatorAvailable}</li>
-                                                <li className="list-group-item">Parking: {currentSurvey.propertyAccess.parkingDistance}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {acceptedSurveys.length > 1 && (
-                                <div className="card-footer text-end">
-                                    <button className="btn btn-secondary me-2" onClick={handlePrevious}>← Previous</button>
-                                    <button className="btn btn-secondary" onClick={handleNext}>Next →</button>
-                                </div>
-                            )}
+                <div className="card-body">
+                    <p><strong>Address:</strong> {currentSurvey.propertyAddress}</p>
+                    <p><strong>Move Date:</strong> {new Date(currentSurvey.moveDate).toLocaleDateString()}</p>
+                    <p><strong>Surveyor:</strong> {currentSurvey.submittedBy?.name || 'N/A'} ({currentSurvey.submittedBy?.email || 'N/A'})</p>
+                    <hr />
+                    <div className="row">
+                        <div className="col-md-6">
+                            {renderItemGroup('Household', currentSurvey.household)}
+                            {renderItemGroup('Vehicles', currentSurvey.vehicles)}
                         </div>
-                    )
+                        <div className="col-md-6">
+                            {renderItemGroup('Major Items', currentSurvey.majorItems)}
+                            <div>
+                                <strong>Property Access</strong>
+                                <ul className="list-group list-group-flush">
+                                    <li className="list-group-item">Type: {currentSurvey.propertyAccess.propertyType}</li>
+                                    <li className="list-group-item">Floor: {currentSurvey.propertyAccess.floorNumber}</li>
+                                    <li className="list-group-item">Elevator: {currentSurvey.propertyAccess.elevatorAvailable}</li>
+                                    <li className="list-group-item">Parking: {currentSurvey.propertyAccess.parkingDistance}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {acceptedSurveys.length > 1 && (
+                    <div className="card-footer text-end">
+                        <button className="btn btn-secondary me-2" onClick={handlePrevious}>← Previous</button>
+                        <button className="btn btn-secondary" onClick={handleNext}>Next →</button>
+                    </div>
                 )}
             </div>
         );
@@ -163,11 +140,7 @@ const AdminDashboard = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <h2>Admin Dashboard</h2>
                 <div>
-                    <span className="me-3">Welcome, {adminName}!</span>
-                    <button className="btn btn-primary me-3" onClick={handleAddSurveyer}>Add Surveyer</button>
-                    <button className="btn btn-secondary me-3" onClick={() => setViewingAccepted(true)}>View Accepted Surveys</button>
-                    <button className="btn btn-info me-3" onClick={handleAddAdmin}>Add Admin</button>
-                    <button className="btn btn-warning" onClick={() => navigate('/admin/review')}>Review Surveys</button>
+                    <span className="me-3 text-muted">Welcome, <strong className="text-dark fw-semibold">{adminName}!</strong></span>
                 </div>
             </div>
 
@@ -191,6 +164,14 @@ const AdminDashboard = () => {
             <div className="row mb-5">
                 <div className="col-12">
                     <NivoBarChart />
+                </div>
+            </div>
+
+            {/* Accepted Surveys List */}
+            <div className="row mb-5">
+                <div className="col-12">
+                    <h3 className="mb-4">All Accepted Surveys</h3>
+                    {renderAcceptedSurveys()}
                 </div>
             </div>
 

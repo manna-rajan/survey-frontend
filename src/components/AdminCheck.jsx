@@ -71,12 +71,6 @@ const AdminCheck = ({ onReviewSuccess }) => {
         }
     };
 
-    if (loading) return <div className="card"><div className="card-body">Loading pending surveys...</div></div>;
-    if (error) return <div className="alert alert-danger">{error}</div>;
-    if (surveys.length === 0) return <div className="card"><div className="card-body">No pending surveys to review.</div></div>;
-
-    const currentSurvey = surveys[currentIndex];
-
     const renderItemGroup = (title, items) => (
         <div className="mb-3">
             <strong>{title}</strong>
@@ -93,50 +87,66 @@ const AdminCheck = ({ onReviewSuccess }) => {
 
     return (
         <div className="container">
-            <Nav/>
-            <div className="row">
-                <div className="col-12 mb-5">
-                    <div className="card border-primary">
-                        <div className="card-header d-flex justify-content-between align-items-center">
-                            <h5 className="mb-0">Review Survey ({currentIndex + 1} of {surveys.length})</h5>
-                            <span>By: {currentSurvey.submittedBy?.name || 'N/A'}</span>
+            <Nav />
+            <div className="row justify-content-center mt-4">
+                <div className="col-12 col-lg-10 mb-5">
+                    {loading && (
+                        <div className="card">
+                            <div className="card-body text-center">Loading pending surveys...</div>
                         </div>
-                        <div className="card-body">
-                            <p><strong>Address:</strong> {currentSurvey.propertyAddress}</p>
-                            <p><strong>Move Date:</strong> {new Date(currentSurvey.moveDate).toLocaleDateString()}</p>
-                            <hr />
-                            <div className="row">
-                                <div className="col-md-6">
-                                    {renderItemGroup('Household', currentSurvey.household)}
-                                    {renderItemGroup('Vehicles', currentSurvey.vehicles)}
+                    )}
+                    {error && <div className="alert alert-danger">{error}</div>}
+                    {!loading && !error && (
+                        <>
+                            {surveys.length === 0 ? (
+                                <div className="card">
+                                    <div className="card-body text-center">No pending surveys to review.</div>
                                 </div>
-                                <div className="col-md-6">
-                                    {renderItemGroup('Major Items', currentSurvey.majorItems)}
-                                    <div>
-                                        <strong>Property Access</strong>
-                                        <ul className="list-group list-group-flush">
-                                            <li className="list-group-item">Type: {currentSurvey.propertyAccess.propertyType}</li>
-                                            <li className="list-group-item">Floor: {currentSurvey.propertyAccess.floorNumber}</li>
-                                            <li className="list-group-item">Elevator: {currentSurvey.propertyAccess.elevatorAvailable}</li>
-                                            <li className="list-group-item">Parking: {currentSurvey.propertyAccess.parkingDistance}</li>
-                                        </ul>
+                            ) : (
+                                <div className="card border-primary">
+                                    <div className="card-header d-flex justify-content-between align-items-center">
+                                        <h5 className="mb-0">Review Survey ({currentIndex + 1} of {surveys.length})</h5>
+                                        <span>By: {surveys[currentIndex].submittedBy?.name || 'N/A'}</span>
+                                    </div>
+                                    <div className="card-body">
+                                        <p><strong>Address:</strong> {surveys[currentIndex].propertyAddress}</p>
+                                        <p><strong>Move Date:</strong> {new Date(surveys[currentIndex].moveDate).toLocaleDateString()}</p>
+                                        <hr />
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                {renderItemGroup('Household', surveys[currentIndex].household)}
+                                                {renderItemGroup('Vehicles', surveys[currentIndex].vehicles)}
+                                            </div>
+                                            <div className="col-md-6">
+                                                {renderItemGroup('Major Items', surveys[currentIndex].majorItems)}
+                                                <div>
+                                                    <strong>Property Access</strong>
+                                                    <ul className="list-group list-group-flush">
+                                                        <li className="list-group-item">Type: {surveys[currentIndex].propertyAccess.propertyType}</li>
+                                                        <li className="list-group-item">Floor: {surveys[currentIndex].propertyAccess.floorNumber}</li>
+                                                        <li className="list-group-item">Elevator: {surveys[currentIndex].propertyAccess.elevatorAvailable}</li>
+                                                        <li className="list-group-item">Parking: {surveys[currentIndex].propertyAccess.parkingDistance}</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="card-footer d-flex justify-content-between">
+                                        <div>
+                                            <button className="btn btn-success me-2" onClick={() => handleReview(surveys[currentIndex]._id, 1)}>Accept</button>
+                                            <button className="btn btn-danger" onClick={() => handleReview(surveys[currentIndex]._id, 2)}>Reject</button>
+                                        </div>
+                                        {surveys.length > 1 && (
+                                            <div>
+                                                <button className="btn btn-secondary me-2" onClick={handlePrevious}>← Previous</button>
+                                                <button className="btn btn-secondary" onClick={handleNext}>Next →</button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="card-footer d-flex justify-content-between">
-                            <div>
-                                <button className="btn btn-success me-2" onClick={() => handleReview(currentSurvey._id, 1)}>Accept</button>
-                                <button className="btn btn-danger" onClick={() => handleReview(currentSurvey._id, 2)}>Reject</button>
-                            </div>
-                            {surveys.length > 1 && (
-                                <div>
-                                    <button className="btn btn-secondary me-2" onClick={handlePrevious}>← Previous</button>
-                                    <button className="btn btn-secondary" onClick={handleNext}>Next →</button>
-                                </div>
                             )}
-                        </div>
-                    </div>
+                        </>
+                    )}
                 </div>
             </div>
         </div>
